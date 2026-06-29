@@ -1,7 +1,7 @@
 {
   "name": "equinox-engineering-water-treatment",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "dependencies": {
     "@expo/metro-runtime": "~56.0.15",
     "expo": "~56.0.12",
