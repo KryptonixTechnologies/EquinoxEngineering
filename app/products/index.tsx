@@ -7,10 +7,6 @@ import { categoryColors, colors } from "../../src/theme/colors";
 const placeholderImage = require("../../assets/product images/placeholder.jpeg");
 const productsPerPage = 12;
 
-function renderDemand(demand: number) {
-  return `${"★".repeat(demand)}${"☆".repeat(5 - demand)}`;
-}
-
 export default function ProductsPage() {
   const { width } = useWindowDimensions();
   const isMobile = width < 700;
@@ -79,33 +75,43 @@ export default function ProductsPage() {
 
       <View style={styles.grid}>
         {visibleProducts.map((product) => (
-          <Link key={product.id} href={`/products/${product.id}`} asChild>
-            <Pressable
-              style={StyleSheet.flatten([
-                styles.card,
-                isTablet && styles.cardTablet,
-                isMobile && styles.cardMobile,
-              ])}
-            >
-              <Image source={placeholderImage} style={styles.productImage} resizeMode="cover" />
-              {product.topMover ? <Text style={styles.topMover}>Top 20 fast mover</Text> : null}
-              <View style={styles.cardBody}>
-                <View style={styles.productText}>
+          <View
+            key={product.id}
+            style={StyleSheet.flatten([
+              styles.card,
+              isTablet && styles.cardTablet,
+              isMobile && styles.cardMobile,
+            ])}
+          >
+            <Link href={`/products/${product.id}`} asChild>
+              <Pressable>
+                <Image source={placeholderImage} style={styles.productImage} resizeMode="cover" />
+                {product.topMover ? <Text style={styles.topMover}>Top 20 fast mover</Text> : null}
+              </Pressable>
+            </Link>
+            <View style={styles.cardBody}>
+              <Link href={`/products/${product.id}`} asChild>
+                <Pressable style={styles.productText}>
                   <Text style={StyleSheet.flatten([styles.category, { color: categoryColors[product.category] }])}>
                     {product.category}
                   </Text>
                   <Text style={styles.name}>{product.name}</Text>
-                </View>
-                <View style={styles.cardFooter}>
-                  <View style={styles.metaItem}>
-                    <Text style={styles.metaLabel}>Demand</Text>
-                    <Text style={styles.demand}>{renderDemand(product.demand)}</Text>
-                  </View>
-                  <Text style={styles.viewDetails}>View details</Text>
-                </View>
+                </Pressable>
+              </Link>
+              <View style={styles.cardFooter}>
+                <Link href={`/contact?product=${encodeURIComponent(product.name)}`} asChild>
+                  <Pressable style={styles.rfqButton}>
+                    <Text style={styles.rfqButtonText}>Request for Quote</Text>
+                  </Pressable>
+                </Link>
+                <Link href={`/products/${product.id}`} asChild>
+                  <Pressable>
+                    <Text style={styles.viewDetails}>View details</Text>
+                  </Pressable>
+                </Link>
               </View>
-            </Pressable>
-          </Link>
+            </View>
+          </View>
         ))}
       </View>
 
@@ -290,23 +296,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 20,
   },
-  metaItem: {
-    backgroundColor: colors.offWhite,
+  rfqButton: {
+    backgroundColor: "#EFF6FF",
+    borderColor: "#BFDBFE",
+    borderWidth: 1,
     borderRadius: 8,
-    minWidth: 112,
-    padding: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
   },
-  metaLabel: {
-    color: colors.slateGray,
-    fontSize: 11,
-    fontWeight: "800",
-    textTransform: "uppercase",
-  },
-  demand: {
-    color: colors.warning,
+  rfqButtonText: {
+    color: colors.primaryBlue,
     fontSize: 14,
     fontWeight: "900",
-    marginTop: 4,
   },
   viewDetails: {
     color: colors.primaryBlue,
